@@ -1,0 +1,699 @@
+/* =========================
+   GLOBAL STYLES
+   ========================= */
+
+body {
+  padding-top: 70px; 
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.7;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* =========================
+   NAVBAR
+   ========================= */
+
+.navbar-brand {
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* =========================
+   HERO SECTION
+   ========================= */
+
+.hero-section {
+  min-height: 90vh;
+  background: linear-gradient(135deg, #f0f4ff, #e8f0fe);
+  display: flex;
+  align-items: center;
+}
+
+/* Animated Gradient Name */
+.gradient-text {
+  background: linear-gradient(90deg, #4f46e5, #6366f1, #4f46e5);
+  background-size: 200% 200%;
+  animation: gradientMove 3s ease infinite;
+
+  /* Standard property */
+  background-clip: text;
+  color: transparent;
+
+  /* WebKit fallback */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.hero-section .badge {
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 50px;
+  padding: 0.5rem 1rem;
+}
+
+/* Buttons */
+.hero-section .btn-primary {
+  background-color: #4f46e5;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.hero-section .btn-primary:hover {
+  background-color: #6366f1;
+}
+
+.hero-section .btn-outline-secondary {
+  border-radius: 30px;
+  padding: 12px 30px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.hero-section .btn-outline-secondary:hover {
+  background-color: rgba(99,102,241,0.1);
+}
+
+/* Resume Button */
+.btn-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #fff;
+  color: #4f46e5;
+  border-radius: 50px;
+  padding: 10px 20px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-download:hover {
+  background-color: #4f46e5;
+  color: #fff;
+}
+
+/* =========================
+   HERO ANIMATIONS
+   ========================= */
+
+.hero-section h1,
+.hero-section p,
+.hero-section .btn {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.8s forwards;
+}
+
+.hero-section h1 { animation-delay: 0.2s; }
+.hero-section p { animation-delay: 0.4s; }
+
+.hero-section .btn-primary { animation-delay: 0.6s; }
+.hero-section .btn-outline-secondary { animation-delay: 0.8s; }
+.btn-download { animation-delay: 1s; }
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   SECTION HEADINGS
+   ========================= */
+
+section h2 {
+  font-weight: 600;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+section h2::after {
+  content: '';
+  width: 60px;
+  height: 3px;
+  background-color: #4f46e5;
+  display: block;
+  margin: 10px auto;
+}
+
+/* =========================
+   PROJECT CARDS
+   ========================= */
+
+.card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 35px rgba(0,0,0,0.15);
+}
+
+/* Image hover effect */
+.card-img-top {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .card-img-top {
+  transform: scale(1.05);
+}
+
+/* =========================
+   BUTTONS (GLOBAL)
+   ========================= */
+
+.btn {
+  border-radius: 30px;
+  padding: 10px 25px;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+
+.btn:focus-visible {
+  outline: 3px solid #6366f1;
+  outline-offset: 3px;
+}
+
+/* =========================
+   CONTACT FORM
+   ========================= */
+
+form input,
+form textarea {
+  border-radius: 10px;
+}
+
+form input:focus,
+form textarea:focus {
+  outline: none;
+  box-shadow: 0 0 5px #4f46e5;
+  border-color: #4f46e5;
+}
+
+/* =========================
+   FOOTER
+   ========================= */
+
+footer {
+  font-size: 14px;
+  text-align: center;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 768px) {
+  .hero-section {
+    text-align: center;
+  }
+
+  .hero-section img {
+    max-width: 180px;
+    margin-top: 20px;
+  }
+
+  .card {
+    margin-bottom: 20px;
+  }
+}
+
+/* Navbar link default style */
+.navbar .nav-link {
+  color: #000 !important;      /* Black text */
+  font-weight: 500;
+  position: relative;
+  padding: 8px 12px;
+}
+
+/* Underline (hidden by default) */
+.navbar .nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #4f46e5;   /* Violet */
+  transition: width 0.3s ease;
+}
+
+/* Show underline ONLY on hover */
+.navbar .nav-link:hover::after {
+  width: 100%;
+}
+
+/* Keep text black on hover */
+.navbar .nav-link:hover {
+  color: #000 !important;
+}
+
+/* REMOVE underline from active link */
+.navbar .nav-link.active::after {
+  width: 0;
+}
+
+/* Navbar brand (name) */
+.navbar-brand {
+  color: #4f46e5 !important;   /* Purple / Violet */
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* Keep purple on hover */
+.navbar-brand:hover {
+  color: #6366f1 !important;   /* Slightly lighter violet */
+  text-decoration: none;
+}
+.badge-violet {
+  background-color: #4f46e5;   /* Violet */
+  color: #fff;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  border-radius: 50px;
+}
+
+/* Outer wrapper with gradient ring */
+.profile-img-wrapper {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%; /* makes the wrapper circular */
+  padding: 8px; /* gradient ring thickness */
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  box-sizing: border-box;
+}
+
+/* Inner circle to hold the image */
+.profile-img-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%; /* inner circle */
+  overflow: hidden;   /* crop the image to circle */
+  background-color: #e8f0fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The image itself */
+.profile-img-inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;      /* fill the circle without stretching */
+  object-position: center 35%; /* center the image */
+  display: block;
+}
+/* Indigo button with hover effect without changing color */
+.btn-indigo {
+    background-color: #4f46e5; /* main indigo */
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+/* Hover: subtle shadow/lift only */
+.btn-indigo:hover {
+    background-color: #4f46e5; /* keep the same color */
+    color: white;               /* text stays white */
+    transform: translateY(-3px); /* slight lift */
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2); /* subtle shadow */
+}
+
+
+
+/* Indigo footer */
+.footer-indigo {
+    background-color: #4f46e5; /* your indigo color */
+    color: white;              /* ensures text is readable */
+    text-align: center;
+    padding: 1rem 0;
+}
+
+/* style.css */
+
+/* Indigo background section */
+.bg-indigo-section {
+    background-color: #4f46e5; /* your indigo color */
+    color: white;              /* ensures text is readable */
+    text-align: center;
+    padding: 3rem 0;
+}
+
+/* Optional: hover effect for links */
+.bg-indigo-section a {
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.bg-indigo-section a:hover {
+    color: #c7d2fe; /* light indigo shade for hover */
+}
+
+/* Form input and textarea styles */
+form input,
+form textarea {
+    border-radius: 10px;
+    border: 1px solid #ccc;       /* default border */
+    transition: all 0.3s ease;
+}
+
+/* On focus (click) or hover */
+form input:focus,
+form textarea:focus,
+form input:hover,
+form textarea:hover {
+    outline: none;
+    box-shadow: 0 0 5px #4f46e5;  /* indigo glow */
+    border-color: #4f46e5;         /* indigo border */
+}
+.skill-item {
+  width: 140px;
+  padding: 20px;
+  border-radius: 15px;
+  background: #ffffff;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.skill-item i {
+  font-size: 3rem;
+  color: #4f46e5;
+  margin-bottom: 10px;
+}
+
+.skill-item p {
+  margin: 0;
+  font-weight: 500;
+}
+
+.skill-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+.about-text {
+  max-width: 700px;     /* controls line length */
+  font-size: 1.05rem;
+  line-height: 1.8;     /* better readability */
+}
+
+.card {
+  overflow: hidden;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
+}
+
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+}
+
+.mobile-img-wrapper {
+  height: 260px;
+  background-color: #f4f6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.mobile-img-wrapper img {
+  max-height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+.bg-indigo-section {
+    background-color: #4f46e5; /* your indigo color */
+    color: white;
+    text-align: center;
+    padding: 3rem 0;
+}
+
+/* =========================
+   EDUCATION & TIMELINE
+   ========================= */
+
+.timeline {
+  position: relative;
+  padding-left: 1.5rem;
+  border-left: 2px solid #4f46e5;
+  margin-left: 1rem;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 2.5rem;
+}
+
+/* The Circular Icon on the line */
+.timeline-icon {
+  position: absolute;
+  left: -2.6rem; 
+  background: white;
+  border: 2px solid #4f46e5;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4f46e5;
+  z-index: 10;
+}
+
+.timeline-content {
+  padding-left: 10px;
+}
+
+/* Flex wrapper for heading and score */
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap; /* Allows wrapping on mobile */
+}
+
+.timeline-score {
+  text-align: right;
+  font-weight: 700;
+  color: #4f46e5;
+  font-size: 1.1rem;
+}
+
+.timeline-score span {
+  font-size: 0.8rem;
+  color: #333;
+  margin-left: 2px;
+}
+
+/* =========================
+   CERTIFICATION CARDS
+   ========================= */
+
+.cert-card {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.cert-card i {
+  font-size: 1.5rem;
+  color: #4f46e5;
+  margin-bottom: 0.5rem;
+}
+
+.cert-card p {
+  margin: 0;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.3;
+}
+
+.cert-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.15);
+  border-color: #4f46e5;
+}
+
+/* =========================
+   RESPONSIVE FIXES
+   ========================= */
+
+@media (max-width: 576px) {
+  .timeline-header {
+    flex-direction: column;
+  }
+  
+  .timeline-score {
+    text-align: left;
+    margin-top: 5px;
+  }
+}
+
+/* --- Contact Section Styles --- */
+.contact-info-card {
+    display: flex;
+    align-items: center;
+    padding: 1.2rem;
+    background: #f8f9fa;
+    border-radius: 15px;
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+.contact-info-card:hover {
+    border-color: #4f46e5;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(79, 70, 229, 0.08);
+}
+
+.icon-box {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+/* Matching the image's light colored icon backgrounds */
+.icon-box.email { background: #eef2ff; color: #4f46e5; }
+.icon-box.phone { background: #e0e7ff; color: #4f46e5; border: 1px solid #c7d2fe; }
+.icon-box.location { background: #ecfdf5; color: #10b981; }
+
+/* Social Icons */
+.social-links-circle a {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f3f4f6;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #4b5563;
+    margin-right: 10px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-links-circle a:hover {
+    background: #4f46e5;
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+/* Contact Form Container */
+.contact-form-container {
+    background: #f8f9fa;
+    padding: 2.5rem;
+    border-radius: 20px;
+    border: 1px solid #e5e7eb;
+}
+
+.custom-input {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+}
+
+.custom-input:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
+
+/* =========================
+   TYPEWRITER ANIMATION
+   ========================= */
+
+/* Container to keep everything centered/aligned properly */
+.typewriter-container {
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.typewriter {
+  display: block;
+  overflow: hidden; 
+  white-space: nowrap; 
+  border-right: 4px solid #4f46e5; /* Thicker cursor like your image */
+  width: 0;
+  /* Use max-content to prevent the big empty space */
+  max-width: max-content; 
+  
+  /* - typing: 3.5s to type out
+     - pause: 1s pause at the end
+     - total duration 4.5s
+  */
+  animation: 
+    typing 4s steps(20) infinite,
+    blink-caret 0.75s step-end infinite;
+}
+
+/* Updated Keyframes for a Continuous Loop */
+@keyframes typing {
+  0%, 10% { width: 0; }             /* Start at zero */
+  45%, 55% { width: 100%; }         /* Type out and hold */
+  90%, 100% { width: 0; }           /* Erase back to zero */
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: #4f46e5; }
+}
+
+/* Adjust font size for mobile so it doesn't break into two lines */
+@media (max-width: 768px) {
+  .display-4 {
+    font-size: 2.5rem;
+  }
+  .typewriter {
+    letter-spacing: normal;
+    border-right-width: 2px;
+  }
+}
+
