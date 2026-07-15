@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Weather Dashboard - GIF Fixed</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --accent-green: #2ecc71;
+        }
+
+        body {
+            margin: 0; padding: 20px;
+            font-family: 'Inter', sans-serif;
+            color: white; min-height: 100vh;
+            display: flex; justify-content: center;
+            transition: background 1.2s ease;
+            background: #1a1a1a;
+        }
+
+        /* Themes */
+        .theme-sunny { background: linear-gradient(135deg, #d35400, #f39c12) !important; }
+        .theme-cloudy { background: linear-gradient(135deg, #34495e, #7f8c8d) !important; }
+        .theme-rainy { background: linear-gradient(135deg, #1e3c72, #2a5298) !important; }
+        .theme-night { background: linear-gradient(135deg, #000428, #004e92) !important; }
+
+        .dashboard {
+            display: grid; grid-template-columns: repeat(12, 1fr);
+            gap: 20px; max-width: 1200px; width: 100%;
+        }
+
+        .header { grid-column: span 12; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        
+        .search-bar { 
+            background: #ffffff; 
+            border-radius: 30px; padding: 12px 25px; 
+            width: 50%; display: flex; align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .search-bar i { color: #555; }
+        .search-bar input { 
+            background: transparent; border: none; color: #222; 
+            width: 100%; margin-left: 10px; outline: none; font-size: 1rem; 
+        }
+
+        .card { 
+            background: rgba(0, 0, 0, 0.3); 
+            backdrop-filter: blur(25px);
+            border-radius: 25px; padding: 25px; 
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .clock-card { grid-column: span 4; text-align: center; }
+        .main-weather-card { grid-column: span 8; display: flex; justify-content: space-between; align-items: center; }
+        .forecast-5day { grid-column: span 4; }
+        .hourly-forecast { grid-column: span 8; }
+
+        /* Weather Visual GIF Holder */
+        .weather-visual {
+            width: 140px; height: 140px;
+            border-radius: 50%; overflow: hidden;
+            border: 4px solid rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.1);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 25px rgba(255,255,255,0.2);
+            position: relative;
+        }
+
+        .weather-visual img { 
+            width: 100%; height: 100%; 
+            object-fit: cover; 
+            display: block;
+        }
+
+        .temp-big { font-size: 4.5rem; font-weight: 800; margin: 0; }
+        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: center; }
+        
+        .forecast-row { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .current-loc-btn {
+            background: #ffffff; color: #222;
+            border-radius: 30px; padding: 12px 25px;
+            font-weight: bold; border: none; cursor: pointer;
+        }
+
+        canvas { max-height: 250px !important; }
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <div class="header">
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="cityInput" placeholder="Enter city (e.g. Nagpur)...">
+        </div>
+        <button class="current-loc-btn" onclick="getLocation()"><i class="fas fa-location-arrow"></i> My Location</button>
+    </div>
+
+    <div class="card clock-card">
+        <h2 id="cityName">Delhi</h2>
+        <div id="currentTime" style="font-size: 3.5rem; font-weight: 200;">--:--</div>
+        <div id="currentDate" style="opacity: 0.8; font-size: 1.1rem;">Date</div>
+    </div>
+
+    <div class="card main-weather-card">
+        <div>
+            <p class="temp-big" id="mainTemp">--°C</p>
+            <p id="feelsLike" style="font-size: 1.2rem; opacity: 0.8;">Feels like: --</p>
+            <p id="astroInfo" style="margin-top:10px;"><i class="fas fa-sun"></i> -- | <i class="fas fa-moon"></i> --</p>
+        </div>
+        
+        <div style="text-align: center;">
+            <div class="weather-visual">
+                <img id="weatherGif" src="" alt="Weather Status">
+            </div>
+            <h3 id="conditionText" style="margin-top: 15px; font-size: 1.4rem;">Status</h3>
+        </div>
+
+        <div class="details-grid">
+            <div><i class="fas fa-droplet"></i> <br><span id="humidity">--</span>%<br><small>Humidity</small></div>
+            <div><i class="fas fa-wind"></i> <br><span id="wind">--</span>kph<br><small>Wind</small></div>
+            <div><i class="fas fa-gauge"></i> <br><span id="pressure">--</span><br><small>Pressure</small></div>
+            <div><i class="fas fa-sun"></i> <br><span id="uv">--</span><br><small>UV Index</small></div>
+        </div>
+    </div>
+
+    <div class="card forecast-5day">
+        <h3 style="margin-top: 0;">Next 3 Days</h3>
+        <div id="forecastContainer"></div>
+    </div>
+
+    <div class="card hourly-forecast">
+        <h3 style="margin-top: 0;">Temp & Humidity Trend</h3>
+        <canvas id="mainChart"></canvas>
+    </div>
+</div>
+
+<script>
+    const apiKey = '2f13cd393a89436fa74164350251101'; 
+    let myChart;
+
+    // Fixed High-Reliability GIF Links
+    const gifLibrary = {
+    sunny: "https://media.giphy.com/media/26BRrSvJUa0crqw4E/giphy.gif",
+    rainy: "https://media.giphy.com/media/xUPGcEliCc7bETyfO8/giphy.gif",
+    cloudy: "https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif",
+    night: "https://media.giphy.com/media/3o7TKVUn7iM8FMEU24/giphy.gif"
+};
+
+
+    function startLiveClock() {
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('currentTime').innerText = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('currentDate').innerText = now.toDateString();
+        }, 1000);
+    }
+
+    window.onload = () => {
+        startLiveClock();
+        getWeatherData('Delhi'); 
+        document.getElementById('cityInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') getWeatherData(e.target.value);
+        });
+    };
+
+    async function getWeatherData(city) {
+        try {
+            const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=3`);
+            const data = await res.json();
+            if (data.error) throw new Error(data.error.message);
+            
+            updateUI(data);
+            updateVisuals(data.current.condition.text, data.current.is_day);
+        } catch (err) { alert("City not found! Please try 'City, Country' format."); }
+    }
+
+    function updateVisuals(condition, isDay) {
+        const body = document.body;
+        const gifImg = document.getElementById('weatherGif');
+        body.className = '';
+        const cond = condition.toLowerCase();
+
+        let selectedGif = gifLibrary.cloudy;
+
+        if (!isDay) {
+            body.classList.add('theme-night');
+            selectedGif = gifLibrary.night;
+        } else if (cond.includes('sun') || cond.includes('clear')) {
+            body.classList.add('theme-sunny');
+            selectedGif = gifLibrary.sunny;
+        } else if (cond.includes('rain') || cond.includes('drizzle')) {
+            body.classList.add('theme-rainy');
+            selectedGif = gifLibrary.rainy;
+        } else {
+            body.classList.add('theme-cloudy');
+            selectedGif = gifLibrary.cloudy;
+        }
+
+        gifImg.src = selectedGif;
+    }
+
+    function updateUI(data) {
+        document.getElementById('cityName').innerText = `${data.location.name}, ${data.location.region}`;
+        document.getElementById('mainTemp').innerText = `${Math.round(data.current.temp_c)}°C`;
+        document.getElementById('feelsLike').innerText = `Feels like: ${Math.round(data.current.feelslike_c)}°C`;
+        document.getElementById('conditionText').innerText = data.current.condition.text;
+        
+        document.getElementById('humidity').innerText = data.current.humidity;
+        document.getElementById('wind').innerText = data.current.wind_kph;
+        document.getElementById('pressure').innerText = data.current.pressure_mb;
+        document.getElementById('uv').innerText = data.current.uv;
+        document.getElementById('astroInfo').innerHTML = `<i class="fas fa-sun"></i> ${data.forecast.forecastday[0].astro.sunrise} | <i class="fas fa-moon"></i> ${data.forecast.forecastday[0].astro.sunset}`;
+
+        const container = document.getElementById('forecastContainer');
+        container.innerHTML = '';
+        data.forecast.forecastday.forEach(day => {
+            container.innerHTML += `
+                <div class="forecast-row">
+                    <span>${new Date(day.date).toLocaleDateString('en-US', {weekday: 'short'})}</span>
+                    <img src="https:${day.day.condition.icon}" width="35">
+                    <span style="font-weight:bold">${Math.round(day.day.maxtemp_c)}° / ${Math.round(day.day.mintemp_c)}°</span>
+                </div>`;
+        });
+
+        const hours = data.forecast.forecastday[0].hour.filter((_, i) => i % 3 === 0);
+        renderChart(hours.map(h => h.time.split(' ')[1]), hours.map(h => h.temp_c), hours.map(h => h.humidity));
+    }
+
+    function renderChart(labels, temps, hums) {
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        if (myChart) myChart.destroy();
+        myChart = new Chart(ctx, {
+            data: {
+                labels: labels,
+                datasets: [
+                    { type: 'line', label: 'Temp (°C)', data: temps, borderColor: '#fff', tension: 0.4, yAxisID: 'y' },
+                    { type: 'bar', label: 'Humidity (%)', data: hums, backgroundColor: 'rgba(255,255,255,0.2)', yAxisID: 'y1' }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                scales: {
+                    y: { ticks: { color: '#fff' }, grid: { display: false } },
+                    y1: { position: 'right', ticks: { color: '#ddd' }, grid: { display: false } },
+                    x: { ticks: { color: '#fff' } }
+                }
+            }
+        });
+    }
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(pos => {
+                getWeatherData(`${pos.coords.latitude},${pos.coords.longitude}`);
+            });
+        }
+    }
+</script>
+</body>
+</html>
